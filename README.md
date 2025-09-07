@@ -28,7 +28,6 @@ Video reception service
 │   ├── 📁 application/                 # Application layer (use case orchestration)
 │   │   ├── 📁 use_cases/               # Use cases ()
 │   │   ├── 📁 dto/                     # Data Transfer Objects
-│   │   └── 📁 interfaces/              # Application-level interfaces
 │   │
 │   ├── 📁 infrastructure/              # Technical implementations
 │   │   ├── 📁 kafka/                   # Kafka producer

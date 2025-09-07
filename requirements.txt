@@ -7,5 +7,6 @@ aiomysql
 PyMySQL
 aiokafka
 motor
+beanie
 pydantic-settings
 cryptography

@@ -1,7 +1,6 @@
 from typing import List
-from app.infrastructure.database.models.practice_document import PracticeDocument
 from beanie import Document
-
+from app.infrastructure.database.models.practice_document import PracticeDocument
 
 class UserDocument(Document):
     uid: str
