@@ -16,8 +16,11 @@ class MongoConnection:
         mongo_db = os.getenv("MONGO_DB", "keyfairy")
 
         # Build the MongoDB URI
-        self.mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:{mongo_port}"
+        self.mongo_uri = (
+            f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:{mongo_port}/?authSource={mongo_db}"
+            )
         self.mongo_db_name = mongo_db
+
         self.client: AsyncIOMotorClient | None = None
         self.db = None
         

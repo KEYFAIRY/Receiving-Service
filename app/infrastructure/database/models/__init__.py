@@ -1,5 +1,5 @@
-from app.infrastructure.database.models.practice_document import PracticeModel
-from app.infrastructure.database.models.user_document import UserModel
+from app.infrastructure.database.models.practice_document import PracticeDocument
+from app.infrastructure.database.models.user_document import UserDocument
 
 
-all_models = [UserModel, PracticeModel]
+all_models = [UserDocument, PracticeDocument]

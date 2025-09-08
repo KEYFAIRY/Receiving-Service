@@ -1,0 +1,24 @@
+import os
+import aiofiles
+import logging
+
+from app.domain.repositories.i_videos_repo import IVideoRepo
+
+
+logger = logging.getLogger(__name__)
+
+class LocalVideoRepository(IVideoRepo):
+    def __init__(self, base_dir: str | None = None):
+        self.base_dir = base_dir or os.getenv("CONTAINER_VIDEO_PATH", "/tmp/videos")
+        os.makedirs(self.base_dir, exist_ok=True)
+
+    async def save(self, filename: str, content: bytes) -> str:
+        file_path = os.path.join(self.base_dir, filename)
+        try:
+            async with aiofiles.open(file_path, "wb") as out_file:
+                await out_file.write(content)
+            logger.info(f"Video saved at {file_path}")
+            return file_path
+        except Exception as e:
+            logger.error(f"Error saving video: {e}", exc_info=True)
+            raise

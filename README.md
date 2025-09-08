@@ -33,7 +33,6 @@ Video reception service
 │   │   ├── 📁 kafka/                   # Kafka producer
 │   │   ├── 📁 database/                # Database adapters
 │   │   │   └── 📁 models/              # Database models
-│   │   ├── 📁 storage/                 # Local file system access (save videos)
 │   │   └── 📁 repositories/            # Concrete repository implementations
 │   │
 │   ├── 📁 presentation/               # Presentation layer (API and external interfaces)

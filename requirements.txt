@@ -10,3 +10,5 @@ motor
 beanie
 pydantic-settings
 cryptography
+aiofiles
+python-multipart

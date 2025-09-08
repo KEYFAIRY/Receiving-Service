@@ -13,9 +13,15 @@ class MongoRepository(IMongoRepo):
     async def add_practice_to_user(self, uid: str, practice: PracticeMetadata) -> PracticeMetadata:
         try:
             # Find user document
-            user_doc = await UserDocument.find_one(UserDocument.uid == uid)
+            user_doc = await UserDocument.find_one({"uid": uid})
+
             if not user_doc:
-                raise ValueError(f"User with uid={uid} not found")
+                user_doc = UserDocument(
+                    uid=uid,
+                    practices=[],
+                )
+                await user_doc.insert()
+                logger.info(f"Created new user document for uid={uid}")
 
             # Convert Practice entity -> PracticeDocument
             practice_doc = PracticeDocument(
