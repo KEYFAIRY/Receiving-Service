@@ -31,7 +31,7 @@ class PracticeService:
         
         # 2. Save the video on disk (via videos_repo)
         video_filename = f"practice_{mysql_saved_practice.id}.mp4"
-        file_path = await self.videos_repo.save(video_filename, video_content)
+        file_path = await self.videos_repo.save(video_filename, video_content, mysql_saved_practice.id_student)
         
         logging.info(f"Practice video saved at {file_path}")
         

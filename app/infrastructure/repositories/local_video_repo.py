@@ -4,7 +4,6 @@ import logging
 
 from app.domain.repositories.i_videos_repo import IVideoRepo
 
-
 logger = logging.getLogger(__name__)
 
 class LocalVideoRepository(IVideoRepo):
@@ -12,8 +11,14 @@ class LocalVideoRepository(IVideoRepo):
         self.base_dir = base_dir or os.getenv("CONTAINER_VIDEO_PATH", "/tmp/videos")
         os.makedirs(self.base_dir, exist_ok=True)
 
-    async def save(self, filename: str, content: bytes) -> str:
-        file_path = os.path.join(self.base_dir, filename)
+    async def save(self, filename: str, content: bytes, uid: str) -> str:
+        """
+        Save video under path: base_dir/{uid}/videos/{filename}
+        """
+        user_dir = os.path.join(self.base_dir, uid, "videos")
+        os.makedirs(user_dir, exist_ok=True)  # Create dirs if not exists
+
+        file_path = os.path.join(user_dir, filename)
         try:
             async with aiofiles.open(file_path, "wb") as out_file:
                 await out_file.write(content)
