@@ -1,7 +1,4 @@
-# app/domain/repositories/i_video_repo.py
 from abc import ABC, abstractmethod
-from typing import Protocol
-
 
 class IVideoRepo(ABC):
     """Abstract repository interface for storing videos."""
