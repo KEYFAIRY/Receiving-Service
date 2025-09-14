@@ -1,8 +1,10 @@
 import logging
 from app.domain.entities.practice import Practice
 from app.domain.entities.practice_metadata import PracticeMetadata
-from app.domain.repositories.i_mongo_repo import IMongoRepo
-from app.domain.repositories.i_mysql_repo import IMySQLRepo
+from app.domain.entities.scale import Scale
+from app.domain.repositories.i_metadata_repo import IMetadataRepo
+from app.domain.repositories.i_practice_repo import IPracticeRepo
+from app.domain.repositories.i_scale_repo import IScaleRepo
 from app.domain.repositories.i_videos_repo import IVideoRepo
 
 logger = logging.getLogger(__name__)
@@ -11,9 +13,10 @@ logger = logging.getLogger(__name__)
 class PracticeService:
     """Domain service for management of practice data"""
 
-    def __init__(self, mysql_repo: IMySQLRepo, mongo_repo: IMongoRepo, videos_repo: IVideoRepo):
-        self.mysql_repo = mysql_repo
-        self.mongo_repo = mongo_repo
+    def __init__(self, practice_repo: IPracticeRepo, scale_repo: IScaleRepo, metadata_repo: IMetadataRepo, videos_repo: IVideoRepo):
+        self.practice_repo = practice_repo
+        self.scale_repo = scale_repo
+        self.metadata_repo = metadata_repo
         self.videos_repo = videos_repo
 
     async def store_practice_data(self, practice: Practice, video_content: bytes, video_in_local:str) -> PracticeMetadata:
@@ -25,7 +28,22 @@ class PracticeService:
         """
 
         # 1. Save practice data in MySQL
-        mysql_saved_practice = await self.mysql_repo.create(practice)
+        
+        # Check if scale exists, if not create it
+        id_scale = None
+        
+        existing_scale = await self.scale_repo.get_by_name_and_type(practice.scale, practice.scale_type)
+        
+        if not existing_scale:
+            scale = Scale(name=practice.scale, scale_type=practice.scale_type)
+            new_scale = await self.scale_repo.create(scale)
+            id_scale = new_scale.id
+        else:
+            id_scale = existing_scale.id
+            
+        practice.id_scale = id_scale
+            
+        mysql_saved_practice = await self.practice_repo.create(practice)
         
         logging.info(f"Practice metadata saved in MySQL with ID {mysql_saved_practice.id}")
         
@@ -45,7 +63,7 @@ class PracticeService:
             audio_done=False,
         )
         
-        await self.mongo_repo.add_practice_to_user(practice.id_student, practice_metadata)
+        await self.metadata_repo.add_practice_to_user(practice.id_student, practice_metadata)
         
         logging.info(f"Practice metadata saved in Mongo for practice ID {practice_metadata.id}")
         

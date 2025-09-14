@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/practice", tags=["Practices"])
 
-
 @router.post(
     "/register",
     response_model=StandardResponse[PracticeResponse],
@@ -23,7 +22,7 @@ router = APIRouter(prefix="/practice", tags=["Practices"])
 )
 async def register_practice(
     video: UploadFile = File(..., description="Video file of the practice"),
-    practice_data: str = Form(..., description="JSON string with PracticeRequest data"),
+    practice_data: str = Form(..., description="JSON string with practice metadata"),
     use_case: RegisterPracticeUseCase = Depends(register_practice_use_case_dependency)
 ):
     """
@@ -31,31 +30,32 @@ async def register_practice(
     """
     logger.info("Registering practice...")
 
-    # Parsear el JSON recibido como string -> PracticeRequest
     try:
         practice_dict = json.loads(practice_data)
         practice_request = PracticeRequest(**practice_dict)
-        practice_dto = PracticeDTO(
-            date=practice_request.date,
-            time=practice_request.time,
-            duration=practice_request.duration,
-            uid=practice_request.uid,
-            practice_id=practice_request.practice_id,
-            video_route=practice_request.video_route,
-            id_scale=practice_request.id_scale,
-            scale=practice_request.scale,
-            reps=practice_request.reps
-        )
-    except (ValidationError, json.JSONDecodeError) as e:
-        logger.error(f"Validation error: {e}")
-        return StandardResponse.internal_error(message="Invalid practice data")
-    
-    # Ejecutar caso de uso
+    except (json.JSONDecodeError, ValidationError) as e:
+        logger.error(f"Invalid practice_data: {e}")
+        raise ValueError(f"Invalid practice_data: {e}")
+
+    practice_dto = PracticeDTO(
+        date=practice_request.date,
+        time=practice_request.time,
+        duration=practice_request.duration,
+        uid=practice_request.uid,
+        practice_id=practice_request.practice_id,
+        video_route=practice_request.video_route,
+        scale=practice_request.scale,
+        scale_type=practice_request.scale_type,
+        reps=practice_request.reps
+    )
+
     practice_response = await use_case.execute(practice_dto, await video.read())
 
-    logger.info(f"Practice {practice_request.practice_id} registered successfully")
-    
+    response = PracticeResponse(video_in_server=practice_response)
+
+    logger.info(f"Practice registered successfully: UID {practice_request.uid}, Scale {practice_request.scale}, Scale Type {practice_request.scale_type}")
+
     return StandardResponse.success(
-        data={"message": practice_response} ,
+        data=response,
         message="Practice registered successfully"
     )

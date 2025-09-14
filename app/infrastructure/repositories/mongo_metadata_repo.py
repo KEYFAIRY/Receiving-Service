@@ -1,13 +1,13 @@
 import logging
 from app.domain.entities.practice_metadata import PracticeMetadata
-from app.domain.repositories.i_mongo_repo import IMongoRepo
+from app.domain.repositories.i_metadata_repo import IMetadataRepo
 from app.infrastructure.database.models.user_document import UserDocument
 from app.infrastructure.database.models.practice_document import PracticeDocument
 
 logger = logging.getLogger(__name__)
 
 
-class MongoRepository(IMongoRepo):
+class MongoMetadataRepository(IMetadataRepo):
     """Concrete implementation of IMongoRepo using Beanie."""
 
     async def add_practice_to_user(self, uid: str, practice: PracticeMetadata) -> PracticeMetadata:

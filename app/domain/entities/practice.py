@@ -9,5 +9,7 @@ class Practice:
     num_musical_errors: int
     duration: int
     id_student: str
-    id_scale: int
+    scale: str
+    scale_type: str
+    id_scale: Optional[int] = None
     id: Optional[int] = None

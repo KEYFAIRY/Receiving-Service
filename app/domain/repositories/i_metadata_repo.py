@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from app.domain.entities.practice import Practice
 
 
-class IMongoRepo(ABC):
+class IMetadataRepo(ABC):
     """Abstract repository for managing Practice documents in MongoDB."""
 
     @abstractmethod

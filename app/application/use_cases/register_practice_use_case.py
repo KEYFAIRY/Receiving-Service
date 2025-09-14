@@ -36,12 +36,13 @@ class RegisterPracticeUseCase:
                 num_postural_errors=0,
                 duration=data.duration,
                 id_student=data.uid,
-                id_scale=data.id_scale,
+                scale=data.scale,
+                scale_type=data.scale_type,
             )
             
             practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_route)
             
-            logging.info(f"Practice data stored successfully for practice ID {practice.id} in local path {practice_metadata.video_in_server}")
+            logging.info(f"Practice data stored successfully for practice ID {practice_metadata.id} in local path {practice_metadata.video_in_server}")
             
             # 2. Publish Kafka event (send message about new practice registered)
             kafka_message = KafkaMessage(
@@ -49,6 +50,7 @@ class RegisterPracticeUseCase:
                 practice_id=practice_metadata.id,
                 message="New practice registered",
                 scale=data.scale,
+                scale_type=data.scale_type,
                 video_route=practice_metadata.video_in_server,
                 reps=data.reps
             )

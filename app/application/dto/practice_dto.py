@@ -8,6 +8,6 @@ class PracticeDTO:
     uid: int
     practice_id: int
     video_route: str
-    id_scale: int
     scale: str
+    scale_type: str
     reps: str

@@ -1,18 +1,16 @@
 import logging
-from typing import List, Optional
-from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from app.core.exceptions import DatabaseConnectionException
 from app.domain.entities.practice import Practice
-from app.domain.repositories.i_mysql_repo import IMySQLRepo
+from app.domain.repositories.i_practice_repo import IPracticeRepo
 from app.infrastructure.database.models.practice_model import PracticeModel
 from app.infrastructure.database.mysql_connection import mysql_connection
 
 logger = logging.getLogger(__name__)
 
 
-class MySQLPracticeRepository(IMySQLRepo):
+class MySQLPracticeRepository(IPracticeRepo):
     """Concrete implementation of IMySQLRepo for Practice using MySQL."""
 
     async def create(self, practice: Practice) -> Practice:
@@ -49,9 +47,11 @@ class MySQLPracticeRepository(IMySQLRepo):
             id=model.id,
             date=model.date,
             time=model.time,
-            num_postural_errors=model.num_postural_errors,
-            num_musical_errors=model.num_musical_errors,
-            duration=model.duration,
+            num_postural_errors=int(model.num_postural_errors) if model.num_postural_errors else 0,
+            num_musical_errors=int(model.num_musical_errors) if model.num_musical_errors else 0,
+            duration=int(model.duration) if model.duration else 0,
             id_student=model.id_student,
             id_scale=model.id_scale,
+            scale="",  # Don't access model.scale.name
+            scale_type="",  # Don't access model.scale.scale_type
         )
