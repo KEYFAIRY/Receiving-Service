@@ -11,5 +11,6 @@ class Practice:
     id_student: str
     scale: str
     scale_type: str
+    bpm: int
     id_scale: Optional[int] = None
     id: Optional[int] = None

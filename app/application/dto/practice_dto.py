@@ -7,7 +7,8 @@ class PracticeDTO:
     duration: int
     uid: int
     practice_id: int
-    video_route: str
+    video_local_route: str
     scale: str
     scale_type: str
-    reps: str
+    reps: int
+    bpm: int

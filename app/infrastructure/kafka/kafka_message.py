@@ -8,4 +8,5 @@ class KafkaMessage:
     scale: str
     scale_type: str
     video_route: str
-    reps: str
+    reps: int
+    bpm: int

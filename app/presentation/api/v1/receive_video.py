@@ -42,11 +42,12 @@ async def register_practice(
         time=practice_request.time,
         duration=practice_request.duration,
         uid=practice_request.uid,
-        practice_id=practice_request.practice_id,
-        video_route=practice_request.video_route,
+        practice_id=0,  # Placeholder, actual ID to be set by the system
+        video_local_route=practice_request.video_local_route,
         scale=practice_request.scale,
         scale_type=practice_request.scale_type,
-        reps=practice_request.reps
+        reps=practice_request.reps,
+        bpm=practice_request.bpm
     )
 
     practice_response = await use_case.execute(practice_dto, await video.read())

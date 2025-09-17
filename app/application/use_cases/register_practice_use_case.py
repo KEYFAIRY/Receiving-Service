@@ -38,9 +38,10 @@ class RegisterPracticeUseCase:
                 id_student=data.uid,
                 scale=data.scale,
                 scale_type=data.scale_type,
+                bpm=data.bpm,
             )
             
-            practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_route)
+            practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_local_route)
             
             logging.info(f"Practice data stored successfully for practice ID {practice_metadata.id} in local path {practice_metadata.video_in_server}")
             
@@ -52,7 +53,8 @@ class RegisterPracticeUseCase:
                 scale=data.scale,
                 scale_type=data.scale_type,
                 video_route=practice_metadata.video_in_server,
-                reps=data.reps
+                reps=data.reps,
+                bpm=data.bpm,
             )
             
             logging.info(f"Publishing Kafka message for practice ID {practice_metadata.id} to topic {settings.KAFKA_OUTPUT_TOPIC}")

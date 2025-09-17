@@ -22,6 +22,7 @@ class MySQLPracticeRepository(IPracticeRepo):
                     num_postural_errors=practice.num_postural_errors,
                     num_musical_errors=practice.num_musical_errors,
                     duration=practice.duration,
+                    bpm=practice.bpm,
                     id_student=practice.id_student,
                     id_scale=practice.id_scale,
                 )
@@ -50,8 +51,9 @@ class MySQLPracticeRepository(IPracticeRepo):
             num_postural_errors=int(model.num_postural_errors) if model.num_postural_errors else 0,
             num_musical_errors=int(model.num_musical_errors) if model.num_musical_errors else 0,
             duration=int(model.duration) if model.duration else 0,
+            bpm=model.bpm,
             id_student=model.id_student,
             id_scale=model.id_scale,
-            scale="",  # Don't access model.scale.name
-            scale_type="",  # Don't access model.scale.scale_type
+            scale="",  # Don't access model.scale.name, is already in the dto
+            scale_type="",  # Don't access model.scale.scale_type, is already in the dto
         )
