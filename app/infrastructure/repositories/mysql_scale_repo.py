@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class MySQLScaleRepository(IScaleRepo):
-    """Concrete implementation of IMySQLScaleRepo for Scale using MySQL."""
+    """Concrete implementation of IScaleRepo for Scale using MySQL."""
 
     async def create(self, scale: Scale) -> Scale:
         async with mysql_connection.get_async_session() as session:

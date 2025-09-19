@@ -20,12 +20,6 @@ class RegisterPracticeUseCase:
         self.kafka_producer = kafka_producer
 
     async def execute(self, data: PracticeDTO, video_content: bytes) -> str:
-        """
-        Flow:
-        - Call service to save practice data (video + mysql + mongo)
-        - Publish event to Kafka
-        - Return metadata DTO
-        """
         try:
             # 1. Store practice data
             # DTO -> Entity

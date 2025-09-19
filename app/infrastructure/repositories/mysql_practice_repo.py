@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class MySQLPracticeRepository(IPracticeRepo):
-    """Concrete implementation of IMySQLRepo for Practice using MySQL."""
+    """Concrete implementation of IPracticeRepo for Practice using MySQL."""
 
     async def create(self, practice: Practice) -> Practice:
         async with mysql_connection.get_async_session() as session:

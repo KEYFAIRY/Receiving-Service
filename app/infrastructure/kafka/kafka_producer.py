@@ -24,10 +24,10 @@ class KafkaProducer:
 
     async def publish_message(self, topic: str, message: KafkaMessage):
         """
-        Publica un KafkaMessage en un topic
+        Publishes KafkaMessage to a topic
         """
         try:
-            payload = message.__dict__  # conversion dataclass → dict
+            payload = message.__dict__  # dataclass → dict
             await self._producer.send_and_wait(topic, payload)
             logger.info("Message published to %s: %s", topic, payload)
         except Exception:

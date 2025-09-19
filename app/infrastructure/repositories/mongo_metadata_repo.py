@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class MongoMetadataRepository(IMetadataRepo):
-    """Concrete implementation of IMongoRepo using Beanie."""
+    """Concrete implementation of IMetadataRepo using Beanie."""
 
     async def add_practice_to_user(self, uid: str, practice: PracticeMetadata) -> PracticeMetadata:
         try:
