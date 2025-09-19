@@ -21,12 +21,12 @@ Video reception service
 │   │   └── exceptions.py               # Custom exception definitions
 │   │
 │   ├── 📁 domain/                      # Business logic (independent of tech)
-│   │   ├── 📁 entities/                # Core entities ()
-│   │   ├── 📁 repositories/            # Repository interfaces ()
-│   │   └── 📁 services/                # Domain services ()
+│   │   ├── 📁 entities/                # Core entities
+│   │   ├── 📁 repositories/            # Repository interfaces
+│   │   └── 📁 services/                # Domain service
 │   │
 │   ├── 📁 application/                 # Application layer (use case orchestration)
-│   │   ├── 📁 use_cases/               # Use cases ()
+│   │   ├── 📁 use_cases/               # Use cases
 │   │   ├── 📁 dto/                     # Data Transfer Objects
 │   │
 │   ├── 📁 infrastructure/              # Technical implementations
@@ -39,7 +39,7 @@ Video reception service
 │   │   ├── 📁 api/                    # REST API endpoints
 │   │   │   └── 📁 v1/                 # API v1 endpoints
 │   │   │       └── dependencies.py    # Shared dependencies (DI)
-│   │   ├── 📁 schemas/                # Pydantic schemas ()
+│   │   ├── 📁 schemas/                # Pydantic schemas
 │   │   └── 📁 middleware/             # Custom middleware (CORS, logging, error handling)
 │   │
 │   └── 📁 shared/                      # Shared utilities
@@ -67,7 +67,7 @@ Video reception service
 
 ### Create .env file, for example:
 
-Edit the .example.env file with yout actual variables, and rename it to .env
+Edit the .example.env file with actual variables, and rename it to .env
 
 
 ### Run the service
@@ -84,7 +84,7 @@ docker ps
 
 ### Test the service
 
-Developing kafdrop to manually test kafka functionalities, but the endpoints are accesible [Here](http://localhost:8110).
+Endpoints are accesible [Here](http://localhost:8110).
 
 
 ### Stop the service
