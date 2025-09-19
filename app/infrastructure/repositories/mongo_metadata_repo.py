@@ -6,7 +6,6 @@ from app.infrastructure.database.models.practice_document import PracticeDocumen
 
 logger = logging.getLogger(__name__)
 
-
 class MongoMetadataRepository(IMetadataRepo):
     """Concrete implementation of IMetadataRepo using Beanie."""
 

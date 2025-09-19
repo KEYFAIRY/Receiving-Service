@@ -1,3 +1,4 @@
+import logging
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -6,11 +7,11 @@ from app.core.exceptions import (
     ReceptionServiceException,
     ValidationException
 )
-import logging
-
 from app.presentation.schemas.common_schema import StandardResponse
 
+
 logger = logging.getLogger(__name__)
+
 
 async def receive_service_exception_handler(request: Request, exc: ReceptionServiceException):
     """Handler for generic reception service exceptions"""

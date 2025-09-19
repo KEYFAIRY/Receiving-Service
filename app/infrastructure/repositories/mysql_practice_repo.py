@@ -1,6 +1,5 @@
 import logging
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-
 from app.core.exceptions import DatabaseConnectionException
 from app.domain.entities.practice import Practice
 from app.domain.repositories.i_practice_repo import IPracticeRepo
@@ -8,7 +7,6 @@ from app.infrastructure.database.models.practice_model import PracticeModel
 from app.infrastructure.database.mysql_connection import mysql_connection
 
 logger = logging.getLogger(__name__)
-
 
 class MySQLPracticeRepository(IPracticeRepo):
     """Concrete implementation of IPracticeRepo for Practice using MySQL."""

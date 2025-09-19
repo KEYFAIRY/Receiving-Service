@@ -1,13 +1,12 @@
 from functools import lru_cache
-
 from fastapi import Request
-
 from app.application.use_cases.register_practice_use_case import RegisterPracticeUseCase
 from app.domain.services.practice_service import PracticeService
 from app.infrastructure.repositories.local_video_repo import LocalVideoRepository
 from app.infrastructure.repositories.mongo_metadata_repo import MongoMetadataRepository
 from app.infrastructure.repositories.mysql_practice_repo import MySQLPracticeRepository
 from app.infrastructure.repositories.mysql_scale_repo import MySQLScaleRepository
+
 
 # Repositories
 @lru_cache()
@@ -30,6 +29,7 @@ def get_local_video_repository() -> LocalVideoRepository:
     """Get instance of LocalVideoRepository."""
     return LocalVideoRepository() 
 
+
 # Services
 @lru_cache()
 def get_register_practice_service() -> PracticeService:
@@ -40,6 +40,7 @@ def get_register_practice_service() -> PracticeService:
         metadata_repo=get_mongo_practice_repository(),
         videos_repo=get_local_video_repository()
     )
+    
     
 # Use Cases
 @lru_cache()

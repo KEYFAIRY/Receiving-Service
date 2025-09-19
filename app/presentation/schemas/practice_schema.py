@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
 
-
 class PracticeRequest(BaseModel):
     """Request with information about a practice"""
 

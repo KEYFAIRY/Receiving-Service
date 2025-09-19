@@ -1,3 +1,4 @@
+import logging
 from app.application.dto.practice_dto import PracticeDTO
 from app.application.dto.practice_metadata_dto import PracticeMetadataDTO
 from app.domain.entities.practice import Practice
@@ -7,10 +8,7 @@ from app.infrastructure.kafka.kafka_producer import KafkaProducer
 from app.core.exceptions import DatabaseConnectionException, ValidationException
 from app.core.config import settings
 
-import logging
-
 logger = logging.getLogger(__name__)
-
 
 class RegisterPracticeUseCase:
     """Use case to save practice video and metadata"""

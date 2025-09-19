@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.infrastructure.database.models.base import Base
 
-
 class ScaleModel(Base):
     __tablename__ = "Scale"
 

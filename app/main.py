@@ -1,13 +1,15 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 import logging
 import asyncio
-
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
-
+from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.logging import configure_logging
+from app.core.exceptions import (
+    DatabaseConnectionException,
+    ValidationException,
+)
 from app.infrastructure.database import mongo_connection, mysql_connection
 from app.infrastructure.kafka.kafka_producer import KafkaProducer
 from app.presentation.middleware.exception_handler import (
@@ -15,10 +17,6 @@ from app.presentation.middleware.exception_handler import (
     validation_exception_handler,
     request_validation_exception_handler,
     general_exception_handler,
-)
-from app.core.exceptions import (
-    DatabaseConnectionException,
-    ValidationException,
 )
 from app.presentation.api.v1.receive_video import router as receive_video
 

@@ -9,7 +9,6 @@ from app.domain.repositories.i_videos_repo import IVideoRepo
 
 logger = logging.getLogger(__name__)
 
-
 class PracticeService:
     """Domain service for management of practice data"""
 

@@ -1,9 +1,6 @@
-from pydantic import BaseModel
 from pydantic.generics import GenericModel
 from typing import Optional, TypeVar, Generic
-
 from app.shared.enums import ResponseCode
-
 
 T = TypeVar("T")
 

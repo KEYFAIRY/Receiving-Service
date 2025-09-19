@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-
 from app.domain.entities.practice import Practice
-
 
 class IPracticeRepo(ABC):
     """Abstract repository interface for Practice entity."""

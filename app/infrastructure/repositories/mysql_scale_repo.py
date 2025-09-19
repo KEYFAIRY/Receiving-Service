@@ -1,7 +1,6 @@
 import logging
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-
 from app.core.exceptions import DatabaseConnectionException
 from app.domain.entities.scale import Scale
 from app.domain.repositories.i_scale_repo import IScaleRepo
@@ -9,7 +8,6 @@ from app.infrastructure.database.models.scale_model import ScaleModel
 from app.infrastructure.database.mysql_connection import mysql_connection
 
 logger = logging.getLogger(__name__)
-
 
 class MySQLScaleRepository(IScaleRepo):
     """Concrete implementation of IScaleRepo for Scale using MySQL."""

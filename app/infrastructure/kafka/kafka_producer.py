@@ -3,9 +3,7 @@ import logging
 from aiokafka import AIOKafkaProducer
 from app.infrastructure.kafka.kafka_message import KafkaMessage
 
-
 logger = logging.getLogger(__name__)
-
 
 class KafkaProducer:
     def __init__(self, bootstrap_servers: str):

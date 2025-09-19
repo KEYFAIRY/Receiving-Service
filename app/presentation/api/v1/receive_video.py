@@ -2,7 +2,6 @@ import logging
 import json
 from fastapi import APIRouter, Depends, status, UploadFile, File, Form
 from pydantic import ValidationError
-
 from app.application.dto.practice_dto import PracticeDTO
 from app.application.use_cases.register_practice_use_case import RegisterPracticeUseCase
 from app.presentation.api.v1.dependencies import register_practice_use_case_dependency
