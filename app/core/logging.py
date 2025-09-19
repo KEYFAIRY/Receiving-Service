@@ -9,7 +9,7 @@ def configure_logging():
     logging.basicConfig(
         level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO),
         format=settings.LOG_FORMAT,
-        handlers=[logging.StreamHandler(sys.stdout)],  # stdout para Docker/K8s
+        handlers=[logging.StreamHandler(sys.stdout)],
     )
 
     logging.getLogger("uvicorn").setLevel(logging.WARNING)
