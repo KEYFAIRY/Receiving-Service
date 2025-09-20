@@ -30,12 +30,9 @@ class PracticeRequest(BaseModel):
 
 class PracticeResponse(BaseModel):
     """Response with information about a registered practice"""
-
-    video_in_server: str = Field(..., description="Path to the video in the server", example="/videos/practice_202.mp4")
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "video_in_server": "/videos/practice_202.mp4"
-            }
-        }
+    practice_id: int = Field(..., description="ID of the registered practice", example=101)
+    date: str = Field(..., description="Date of the practice in YYYY-MM-DD format", example="2025-09-07")
+    time: str = Field(..., description="Time of the practice in HH:MM:SS format", example="15:30:00")
+    duration: int = Field(..., description="Duration of the practice in seconds", example=3600)
+    scale: str = Field(..., description="Name of the musical scale practiced", example="C Major")
+    scale_type: str = Field(..., description="Type of the musical scale", example="Major")

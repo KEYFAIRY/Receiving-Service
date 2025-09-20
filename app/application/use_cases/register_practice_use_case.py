@@ -17,7 +17,7 @@ class RegisterPracticeUseCase:
         self.practice_service = practice_service
         self.kafka_producer = kafka_producer
 
-    async def execute(self, data: PracticeDTO, video_content: bytes) -> str:
+    async def execute(self, data: PracticeDTO, video_content: bytes) -> int:
         try:
             # 1. Store practice data
             # DTO -> Entity
@@ -44,7 +44,6 @@ class RegisterPracticeUseCase:
                 message="New practice registered",
                 scale=data.scale,
                 scale_type=data.scale_type,
-                video_route=practice_metadata.video_in_server,
                 reps=data.reps,
                 bpm=data.bpm,
             )
@@ -53,7 +52,7 @@ class RegisterPracticeUseCase:
             
             await self.kafka_producer.publish_message(topic=settings.KAFKA_OUTPUT_TOPIC, message=kafka_message)
 
-            return practice_metadata.video_in_server
+            return practice_metadata.id
         except (DatabaseConnectionException, ValidationException) as e:
             logger.error(f"Error while registering practice: {e}", exc_info=True)
             raise

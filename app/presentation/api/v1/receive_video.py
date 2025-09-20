@@ -51,7 +51,14 @@ async def register_practice(
 
     practice_response = await use_case.execute(practice_dto, await video.read())
 
-    response = PracticeResponse(video_in_server=practice_response)
+    response = PracticeResponse(
+        practice_id=practice_response,
+        date=practice_request.date,
+        time=practice_request.time,
+        duration=practice_request.duration,
+        scale=practice_request.scale,
+        scale_type=practice_request.scale_type
+    )
 
     logger.info(f"Practice registered successfully: UID {practice_request.uid}, Scale {practice_request.scale}, Scale Type {practice_request.scale_type}")
 
