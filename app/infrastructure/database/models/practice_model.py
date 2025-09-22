@@ -10,7 +10,7 @@ class PracticeModel(Base):
     time = Column(String(50), nullable=False)
     num_postural_errors = Column(Numeric, nullable=True)
     num_musical_errors = Column(Numeric, nullable=True)
-    duration = Column(Numeric, nullable=True)
+    duration = Column(Numeric, nullable=False)
     bpm = Column(Integer, nullable=False)
     id_student = Column(String(128), nullable=False)
     
