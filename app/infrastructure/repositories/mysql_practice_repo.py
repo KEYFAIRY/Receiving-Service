@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from app.core.exceptions import DatabaseConnectionException
 from app.domain.entities.practice import Practice
@@ -14,9 +15,12 @@ class MySQLPracticeRepository(IPracticeRepo):
     async def create(self, practice: Practice) -> Practice:
         async with mysql_connection.get_async_session() as session:
             try:
+                practice_dt = datetime.strptime(
+                    f"{practice.date} {practice.time}", "%Y-%m-%d %H:%M:%S"
+                )
+
                 model = PracticeModel(
-                    date=practice.date,
-                    time=practice.time,
+                    practice_datetime=practice_dt,
                     num_postural_errors=practice.num_postural_errors,
                     num_musical_errors=practice.num_musical_errors,
                     duration=practice.duration,
@@ -42,16 +46,17 @@ class MySQLPracticeRepository(IPracticeRepo):
                 raise DatabaseConnectionException(f"Error creating practice: {str(e)}")
 
     def _model_to_entity(self, model: PracticeModel) -> Practice:
+        dt = model.practice_datetime
         return Practice(
             id=model.id,
-            date=model.date,
-            time=model.time,
+            date=dt.strftime("%Y-%m-%d"),
+            time=dt.strftime("%H:%M:%S"),
             num_postural_errors=int(model.num_postural_errors) if model.num_postural_errors else 0,
             num_musical_errors=int(model.num_musical_errors) if model.num_musical_errors else 0,
             duration=int(model.duration) if model.duration else 0,
             bpm=model.bpm,
             id_student=model.id_student,
             id_scale=model.id_scale,
-            scale="",  # Don't access model.scale.name, is already in the dto
-            scale_type="",  # Don't access model.scale.scale_type, is already in the dto
+            scale="",       # DTO
+            scale_type="",  # DTO
         )
