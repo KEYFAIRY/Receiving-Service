@@ -4,11 +4,12 @@ from dataclasses import dataclass
 class PracticeDTO:
     date: str
     time: str
-    duration: int
-    uid: int
-    practice_id: int
-    video_local_route: str
     scale: str
     scale_type: str
-    reps: int
+    duration: int
     bpm: int
+    figure: int
+    octaves: int
+    uid: str
+    practice_id: int
+    video_local_route: str

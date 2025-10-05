@@ -24,13 +24,15 @@ class RegisterPracticeUseCase:
             practice = Practice(
                 date=data.date,
                 time=data.time,
-                num_musical_errors=0,
-                num_postural_errors=0,
-                duration=data.duration,
-                id_student=data.uid,
                 scale=data.scale,
                 scale_type=data.scale_type,
+                num_postural_errors=0,  # Placeholder, to be updated later
+                num_musical_errors=0,   # Placeholder, to be updated later
+                duration=data.duration,
                 bpm=data.bpm,
+                figure=data.figure,
+                octaves=data.octaves,
+                id_student=data.uid,
             )
             
             practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_local_route)
@@ -47,8 +49,9 @@ class RegisterPracticeUseCase:
                 scale=data.scale,
                 scale_type=data.scale_type,
                 duration=data.duration,
-                reps=data.reps,
                 bpm=data.bpm,
+                figure=data.figure,
+                octaves=data.octaves,
             )
             
             logging.info(f"Publishing Kafka message for practice ID {practice_metadata.id} to topic {settings.KAFKA_OUTPUT_TOPIC}")

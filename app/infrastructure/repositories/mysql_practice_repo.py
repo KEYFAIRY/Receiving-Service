@@ -25,6 +25,8 @@ class MySQLPracticeRepository(IPracticeRepo):
                     num_musical_errors=practice.num_musical_errors,
                     duration=practice.duration,
                     bpm=practice.bpm,
+                    figure=practice.figure,
+                    octaves=practice.octaves,
                     id_student=practice.id_student,
                     id_scale=practice.id_scale,
                 )
@@ -48,15 +50,17 @@ class MySQLPracticeRepository(IPracticeRepo):
     def _model_to_entity(self, model: PracticeModel) -> Practice:
         dt = model.practice_datetime
         return Practice(
-            id=model.id,
             date=dt.strftime("%Y-%m-%d"),
             time=dt.strftime("%H:%M:%S"),
+            scale="",       # DTO
+            scale_type="",  # DTO
             num_postural_errors=int(model.num_postural_errors) if model.num_postural_errors else 0,
             num_musical_errors=int(model.num_musical_errors) if model.num_musical_errors else 0,
             duration=int(model.duration) if model.duration else 0,
             bpm=model.bpm,
+            figure=model.figure,
+            octaves=model.octaves,
             id_student=model.id_student,
             id_scale=model.id_scale,
-            scale="",       # DTO
-            scale_type="",  # DTO
+            id=model.id,
         )

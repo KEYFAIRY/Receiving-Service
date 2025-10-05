@@ -5,12 +5,14 @@ from typing import Optional
 class Practice:
     date: str
     time: str
+    scale: str
+    scale_type: str
     num_postural_errors: int
     num_musical_errors: int
     duration: int
-    id_student: str
-    scale: str
-    scale_type: str
     bpm: int
+    figure: int
+    octaves: int
+    id_student: str
     id_scale: Optional[int] = None
     id: Optional[int] = None
