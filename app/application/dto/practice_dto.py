@@ -8,7 +8,7 @@ class PracticeDTO:
     scale_type: str
     duration: int
     bpm: int
-    figure: int
+    figure: float
     octaves: int
     uid: str
     practice_id: int

@@ -11,7 +11,7 @@ class Practice:
     num_musical_errors: int
     duration: int
     bpm: int
-    figure: int
+    figure: float
     octaves: int
     id_student: str
     id_scale: Optional[int] = None

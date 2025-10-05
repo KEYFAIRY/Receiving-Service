@@ -9,7 +9,7 @@ class PracticeRequest(BaseModel):
     scale_type: str = Field(..., description="Type of the musical scale", example="Major")
     duration: int = Field(..., description="Duration of the practice in seconds", example=3600)
     bpm: int = Field(..., description="Beats per minute during the practice", example=120)
-    figure: int = Field(..., description="Figure practiced", example=1)
+    figure: float = Field(..., description="Figure practiced", example=1)
     octaves: int = Field(..., description="Number of octaves practiced", example=2)
     uid: str = Field(..., description="User ID who performed the practice", example="UID12345")
     video_local_route: str = Field(..., description="Path or URL to the practice video in local storage", example="/videos/practice_202.mp4")    
