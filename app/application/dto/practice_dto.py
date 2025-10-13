@@ -10,6 +10,7 @@ class PracticeDTO:
     bpm: int
     figure: float
     octaves: int
+    total_notes_played: int
     uid: str
     practice_id: int
     video_local_route: str

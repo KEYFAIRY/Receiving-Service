@@ -45,6 +45,7 @@ async def register_practice(
         bpm=practice_request.bpm,
         figure=practice_request.figure,
         octaves=practice_request.octaves,
+        total_notes_played=practice_request.total_notes_played,
         uid=practice_request.uid,
         practice_id=0,  # Placeholder, will be set after registration
         video_local_route=practice_request.video_local_route

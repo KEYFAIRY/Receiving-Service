@@ -32,6 +32,7 @@ class RegisterPracticeUseCase:
                 bpm=data.bpm,
                 figure=data.figure,
                 octaves=data.octaves,
+                total_notes_played=data.total_notes_played,
                 id_student=data.uid,
             )
             

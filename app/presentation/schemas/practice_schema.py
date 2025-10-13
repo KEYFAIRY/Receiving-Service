@@ -11,6 +11,7 @@ class PracticeRequest(BaseModel):
     bpm: int = Field(..., description="Beats per minute during the practice", example=120)
     figure: float = Field(..., description="Figure practiced", example=1)
     octaves: int = Field(..., description="Number of octaves practiced", example=2)
+    total_notes_played: int = Field(..., description="Total number of notes played during the practice", example=20)
     uid: str = Field(..., description="User ID who performed the practice", example="UID12345")
     video_local_route: str = Field(..., description="Path or URL to the practice video in local storage", example="/videos/practice_202.mp4")    
 
@@ -25,6 +26,7 @@ class PracticeRequest(BaseModel):
                 "bpm": 120,
                 "figure": 1,
                 "octaves": 2,
+                "total_notes_played": 20,
                 "uid": "UID12345",
                 "video_local_route": "/videos/practice_202.mp4"
             }

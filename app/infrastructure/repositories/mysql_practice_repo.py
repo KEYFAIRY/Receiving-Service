@@ -27,6 +27,7 @@ class MySQLPracticeRepository(IPracticeRepo):
                     bpm=practice.bpm,
                     figure=practice.figure,
                     octaves=practice.octaves,
+                    total_notes_played=practice.total_notes_played,
                     id_student=practice.id_student,
                     id_scale=practice.id_scale,
                 )
@@ -60,6 +61,7 @@ class MySQLPracticeRepository(IPracticeRepo):
             bpm=model.bpm,
             figure=model.figure,
             octaves=model.octaves,
+            total_notes_played=model.total_notes_played,
             id_student=model.id_student,
             id_scale=model.id_scale,
             id=model.id,

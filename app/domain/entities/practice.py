@@ -13,6 +13,7 @@ class Practice:
     bpm: int
     figure: float
     octaves: int
+    total_notes_played: int
     id_student: str
     id_scale: Optional[int] = None
     id: Optional[int] = None
