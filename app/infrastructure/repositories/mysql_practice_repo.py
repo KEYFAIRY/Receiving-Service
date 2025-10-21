@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from app.core.exceptions import DatabaseConnectionException
 from app.domain.entities.practice import Practice
@@ -47,7 +48,30 @@ class MySQLPracticeRepository(IPracticeRepo):
                 await session.rollback()
                 logger.error(f"MySQL error creating practice: {e}", exc_info=True)
                 raise DatabaseConnectionException(f"Error creating practice: {str(e)}")
+            
+    async def get_by_datetime_uid_scale(self, datetime: datetime, uid: int, id_scale: int) -> Practice | None:
+        async with mysql_connection.get_async_session() as session:
+            try:
+                stmt = (
+                    select(PracticeModel)
+                    .where(
+                        PracticeModel.practice_datetime == datetime,
+                        PracticeModel.id_student == uid,
+                        PracticeModel.id_scale == id_scale,
+                    )
+                )
 
+                result = await session.execute(stmt)
+                model = result.scalar_one_or_none()
+                if model:
+                    return self._model_to_entity(model)
+                return None
+
+            except SQLAlchemyError as e:
+                logger.error(f"MySQL error fetching practice: {e}", exc_info=True)
+                raise DatabaseConnectionException(f"Error fetching practice: {str(e)}")
+
+    
     def _model_to_entity(self, model: PracticeModel) -> Practice:
         dt = model.practice_datetime
         return Practice(

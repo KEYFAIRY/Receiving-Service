@@ -8,6 +8,30 @@ logger = logging.getLogger(__name__)
 
 class MongoMetadataRepository(IMetadataRepo):
     """Concrete implementation of IMetadataRepo using Beanie."""
+    
+    async def get_by_uid_and_practice_id(self, uid: str, practice_id: int) -> PracticeMetadata | None:
+        user_doc = await UserDocument.find_one({"uid": uid})
+        if not user_doc:
+            return None
+
+        # Search for the practice within the user's practices array
+        practice_doc = None
+        for practice in user_doc.practices:
+            if practice.id_practice == practice_id:
+                practice_doc = practice
+                break
+        
+        if not practice_doc:
+            return None
+
+        return PracticeMetadata(
+            id=practice_doc.id_practice,
+            video_in_server=practice_doc.video_in_server,
+            video_in_local=practice_doc.video_in_local,
+            report=practice_doc.report,
+            video_done=practice_doc.video_done,
+            audio_done=practice_doc.audio_done,
+        )
 
     async def add_practice_to_user(self, uid: str, practice: PracticeMetadata) -> PracticeMetadata:
         try:
