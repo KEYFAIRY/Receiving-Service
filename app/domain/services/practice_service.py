@@ -1,3 +1,4 @@
+from importlib import metadata
 import logging
 from app.domain.entities.practice import Practice
 from app.domain.entities.practice_metadata import PracticeMetadata
@@ -19,12 +20,36 @@ class PracticeService:
         self.metadata_repo = metadata_repo
         self.videos_repo = videos_repo
 
+    async def practice_exists(self, practice: Practice) -> Practice | None:
+        """Check if a practice already exists in the database based on date, time, student ID, and scale."""
+        
+        id_scale = None
+        
+        existing_scale = await self.scale_repo.get_by_name_and_type(practice.scale, practice.scale_type)
+        
+        # 1. Check if scale already exists, if it does, then the practice may exist
+        if existing_scale:
+            id_scale = existing_scale.id
+            practice_datetime = datetime.strptime(
+                    f"{practice.date} {practice.time}", "%Y-%m-%d %H:%M:%S"
+                )
+            saved_practice = await self.practice_repo.get_by_datetime_uid_scale(
+                practice_datetime, practice.id_student, id_scale
+            )
+            return saved_practice
+        # If scale does not exist, practice cannot exist
+        else:
+            return None
+        
+        
+    
     async def store_practice_data(self, practice: Practice, video_content: bytes, video_in_local:str) -> PracticeMetadata:
         """
         Orchestrates storing of practice data:
+        - Ch|eck if scale exists, if not create it
+        - Save data in MySQL
         - Save the video in storage
-        - Save metadata in MySQL
-        - Save extended metadata in Mongo
+        - Save metadata in Mongo
         """
         
         # Check if scale exists, if not create it
@@ -41,53 +66,29 @@ class PracticeService:
             
         practice.id_scale = id_scale
         
-        # 1. Check if practice already exists in MySQL
-        practice_datetime = datetime.strptime(
-                    f"{practice.date} {practice.time}", "%Y-%m-%d %H:%M:%S"
-                )
-        saved_practice = await self.practice_repo.get_by_datetime_uid_scale(
-            practice_datetime, practice.id_student, id_scale
-        )
+        # 1. Save practice data in MySQL
+        mysql_saved_practice = await self.practice_repo.create(practice)
 
-        if saved_practice:
-            logging.info(f"Practice already exists in MySQL with ID {saved_practice.id}")
+        logging.info(f"Practice data saved in MySQL with ID {mysql_saved_practice.id}")
+
+        # 2. Save the video on disk (via videos_repo)
+        video_filename = f"practice_{mysql_saved_practice.id}.mp4"
+        file_path = await self.videos_repo.save(video_filename, video_content, mysql_saved_practice.id_student)
             
-            # Fetch existing metadata from Mongo
-            mongo_etadata = await self.metadata_repo.get_by_uid_and_practice_id(practice.id_student, saved_practice.id)
-            metadata = PracticeMetadata(
-                id=saved_practice.id,
-                video_in_server=mongo_etadata.video_in_server,
-                video_in_local=video_in_local,
-                report=mongo_etadata.report,
-                video_done=mongo_etadata.video_done,
-                audio_done=mongo_etadata.audio_done,
-            )
-            return metadata
-        
-        else:
-            # 1. Save practice metadata in MySQL
-            mysql_saved_practice = await self.practice_repo.create(practice)
+        logging.info(f"Practice video saved at {file_path}")
             
-            logging.info(f"Practice metadata saved in MySQL with ID {mysql_saved_practice.id}")
+        # 3. Save practice metadata in Mongo
+        practice_metadata = PracticeMetadata(
+            id=mysql_saved_practice.id,
+            video_in_server=file_path,
+            video_in_local=video_in_local,
+            report="",
+            video_done=False,
+            audio_done=False,
+        )
             
-            # 2. Save the video on disk (via videos_repo)
-            video_filename = f"practice_{mysql_saved_practice.id}.mp4"
-            file_path = await self.videos_repo.save(video_filename, video_content, mysql_saved_practice.id_student)
+        await self.metadata_repo.add_practice_to_user(practice.id_student, practice_metadata)
             
-            logging.info(f"Practice video saved at {file_path}")
+        logging.info(f"Practice metadata saved in Mongo for practice ID {practice_metadata.id}")
             
-            # 3. Save practice metadata in Mongo
-            practice_metadata = PracticeMetadata(
-                id=mysql_saved_practice.id,
-                video_in_server=file_path,
-                video_in_local=video_in_local,
-                report="",
-                video_done=False,
-                audio_done=False,
-            )
-            
-            await self.metadata_repo.add_practice_to_user(practice.id_student, practice_metadata)
-            
-            logging.info(f"Practice metadata saved in Mongo for practice ID {practice_metadata.id}")
-            
-            return practice_metadata
+        return practice_metadata

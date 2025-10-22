@@ -1,6 +1,5 @@
 import logging
 from app.application.dto.practice_dto import PracticeDTO
-from app.application.dto.practice_metadata_dto import PracticeMetadataDTO
 from app.domain.entities.practice import Practice
 from app.domain.services.practice_service import PracticeService
 from app.infrastructure.kafka.kafka_message import KafkaMessage
@@ -19,7 +18,6 @@ class RegisterPracticeUseCase:
 
     async def execute(self, data: PracticeDTO, video_content: bytes) -> int:
         try:
-            # 1. Store practice data
             # DTO -> Entity
             practice = Practice(
                 date=data.date,
@@ -36,30 +34,38 @@ class RegisterPracticeUseCase:
                 id_student=data.uid,
             )
             
-            practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_local_route)
+            # 1. Check if practice already exists
+            existent_practice = await self.practice_service.practice_exists(practice)
             
-            logging.info(f"Practice data stored successfully for practice ID {practice_metadata.id} in local path {practice_metadata.video_in_server}")
-            
-            # 2. Publish Kafka event (send message about new practice registered)
-            kafka_message = KafkaMessage(
-                uid=data.uid,
-                practice_id=practice_metadata.id,
-                date=data.date,
-                time=data.time,
-                message="New practice registered",
-                scale=data.scale,
-                scale_type=data.scale_type,
-                duration=data.duration,
-                bpm=data.bpm,
-                figure=data.figure,
-                octaves=data.octaves,
-            )
-            
-            logging.info(f"Publishing Kafka message for practice ID {practice_metadata.id} to topic {settings.KAFKA_OUTPUT_TOPIC}")
-            
-            await self.kafka_producer.publish_message(topic=settings.KAFKA_OUTPUT_TOPIC, message=kafka_message)
+            if existent_practice is not None:
+                logging.info(f"Practice already exists with ID {existent_practice.id}, skipping registration.")
+                return existent_practice.id
+            else:
+                # 1. Store practice data
+                practice_metadata = await self.practice_service.store_practice_data(practice=practice, video_content=video_content, video_in_local=data.video_local_route)
+                
+                logging.info(f"Practice data stored successfully for practice ID {practice_metadata.id} in local path {practice_metadata.video_in_server}")
+                
+                kafka_message = KafkaMessage(
+                    uid=data.uid,
+                    practice_id=practice_metadata.id,
+                    date=data.date,
+                    time=data.time,
+                    message="New practice registered",
+                    scale=data.scale,
+                    scale_type=data.scale_type,
+                    duration=data.duration,
+                    bpm=data.bpm,
+                    figure=data.figure,
+                    octaves=data.octaves,
+                )
+                
+                logging.info(f"Publishing Kafka message for practice ID {practice_metadata.id} to topic {settings.KAFKA_OUTPUT_TOPIC}")
+                
+                # 2. Publish Kafka event (send message about new practice registered)
+                await self.kafka_producer.publish_message(topic=settings.KAFKA_OUTPUT_TOPIC, message=kafka_message)
 
-            return practice_metadata.id
+                return practice_metadata.id
         except (DatabaseConnectionException, ValidationException) as e:
             logger.error(f"Error while registering practice: {e}", exc_info=True)
             raise
