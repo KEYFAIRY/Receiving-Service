@@ -11,7 +11,7 @@ from app.core.exceptions import (
     ValidationException,
 )
 from app.infrastructure.database import mongo_connection, mysql_connection
-from app.infrastructure.kafka.kafka_producer import KafkaProducer
+from app.messages.kafka_producer import KafkaProducer
 from app.presentation.middleware.exception_handler import (
     database_connection_exception_handler,
     validation_exception_handler,

@@ -2,10 +2,10 @@ import logging
 from app.application.dto.practice_dto import PracticeDTO
 from app.domain.entities.practice import Practice
 from app.domain.services.practice_service import PracticeService
-from app.infrastructure.kafka.kafka_message import KafkaMessage
-from app.infrastructure.kafka.kafka_producer import KafkaProducer
 from app.core.exceptions import DatabaseConnectionException, ValidationException
 from app.core.config import settings
+from app.messages.kafka_message import KafkaMessage
+from app.messages.kafka_producer import KafkaProducer
 
 logger = logging.getLogger(__name__)
 
